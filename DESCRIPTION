@@ -1,0 +1,11 @@
+Package: vietnam63
+Type: Package
+Title: Shape files of Vietnam after 2008.
+Version: 0.1.0
+Author: Marc Choisy
+Maintainer: Marc Choisy <marc.choisy@ird.fr>
+Description: Contains the shape files of the administrative divisions of Vietnam
+    as of after 2008, i.e. with 63 provinces.
+License: MIT
+LazyData: TRUE
+RoxygenNote: 5.0.1
