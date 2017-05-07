@@ -50,6 +50,15 @@ pr <- sub("Thua Thien Hue", "Thua Thien - Hue", communes_r@data$province)
 pr <- sub("Ninh Bình", "Ninh Binh", pr)
 communes_r@data$province <- sub("Ba Ria Vung Tau", "Ba Ria - Vung Tau", pr)
 
+rownames(communes_r@data) <- NULL
+for(i in seq_along(communes_r@polygons))
+  communes_r@polygons[[i]]@ID <- as.character(as.numeric(communes_r@polygons[[i]]@ID) + 1)
+rownames(districts_r@data) <- NULL
+for(i in seq_along(districts_r@polygons))
+  districts_r@polygons[[i]]@ID <- as.character(as.numeric(districts_r@polygons[[i]]@ID) + 1)
+rownames(provinces_r@data) <- NULL
+for(i in seq_along(provinces_r@polygons))
+  provinces_r@polygons[[i]]@ID <- as.character(as.numeric(provinces_r@polygons[[i]]@ID) + 1)
 
 provinces <- thinnedSpatialPoly(provinces_r, .01)
 districts <- thinnedSpatialPoly(districts_r, .0036)
