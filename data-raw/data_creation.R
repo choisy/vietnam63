@@ -60,9 +60,35 @@ rownames(provinces_r@data) <- NULL
 for(i in seq_along(provinces_r@polygons))
   provinces_r@polygons[[i]]@ID <- as.character(as.numeric(provinces_r@polygons[[i]]@ID) + 1)
 
+# Fixing a commune ID:
+communes_r@data[communes_r@data$district_id == 60141, "district_id"] <- 60114
+
+# Fixing districts:
+districts_to_remove <- names(which(table(communes_r$district_id) < 2))
+communes_r <- subset(communes_r, !(district_id %in% districts_to_remove))
+districts_r <- subset(districts_r, !(district_id %in% districts_to_remove))
+
+tomerge <- subset(districts_r, object_id %in% c(357, 704))
+merged <- maptools::unionSpatialPolygons(tomerge, c(357, 357))
+attr(merged@polygons[[1]]@Polygons[[1]]@coords, "dimnames") <- NULL
+sel <- which(sapply(districts_r@polygons, function(x) x@ID) == 357)
+districts_r@polygons[[sel]] <- merged@polygons[[1]]
+districts_r <- subset(districts_r, !(object_id %in% paste(c(385, 617, 704))))
+
+# Checking that everything is alright:
+length(communes_r)
+length(unique(communes_r$district_id))
+length(districts_r)
+setdiff(communes_r$district_id, districts_r$district_id)
+length(unique(districts_r$province_id))
+length(provinces_r)
+setdiff(provinces_r$province_id, districts_r$province_id)
+
+# Thining polygons:
 provinces <- thinnedSpatialPoly(provinces_r, .01)
 districts <- thinnedSpatialPoly(districts_r, .0036)
 communes <- thinnedSpatialPoly(communes_r, .00145)
 
+# Saving:
 devtools::use_data(provinces, districts, communes, provinces_r, districts_r,
                    communes_r, overwrite = TRUE)
