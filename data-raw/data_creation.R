@@ -10,25 +10,38 @@ names(communes_r@data) <- c("object_id", "commune_id", "district_id",
                             "commune_vn", "commune", "district_vn", "district",
                             "province_vn", "province", "province_id",
                             "shape_length", "shape_area")
-communes_r@data <- communes_r@data[, c("object_id", "commune_id", "district_id",
-                                       "province_id", "commune", "district",
-                                       "province", "commune_vn", "district_vn",
-                                       "province_vn", "shape_length", "shape_area")]
+#communes_r@data <- communes_r@data[, c("object_id", "commune_id", "district_id",
+#                                       "province_id", "commune", "district",
+#                                       "province", "commune_vn", "district_vn",
+#                                       "province_vn", "shape_length", "shape_area")]
+communes_r@data <- communes_r@data[, c("object_id", "province_id", "district_id", "commune_id",
+                                       "province", "district", "commune",
+                                       "province_vn", "district_vn", "commune_vn",
+                                       "shape_length", "shape_area")]
+
 
 districts_r@data$UniqueIden <- NULL
 names(districts_r@data) <- c("object_id", "district_id",
                             "district_vn", "district",
                             "province", "level", "type", "province_id",
                             "shape_length", "shape_area")
-districts_r@data <- districts_r@data[, c("object_id", "level", "type",
-                                         "district_id", "province_id", "district",
-                                         "province", "district_vn",
+hash <- with(lapply(unique(communes@data[, c("province", "province_vn")]), as.character),
+             setNames(province_vn, province))
+districts_r@data$province_vn <- hash[districts_r@data$province]
+
+#districts_r@data <- districts_r@data[, c("object_id", "level", "type",
+#                                         "district_id", "province_id", "district",
+#                                         "province", "district_vn",
+#                                         "shape_length", "shape_area")]
+districts_r@data <- districts_r@data[, c("object_id", "province_id", "district_id",
+                                         "province", "district",
+                                         "province_vn", "district_vn",
                                          "shape_length", "shape_area")]
 
-communes_r@data <- communes_r@data[, c("object_id", "commune_id", "district_id",
-                                       "province_id", "commune", "district",
-                                       "province", "commune_vn", "district_vn",
-                                       "province_vn", "shape_length", "shape_area")]
+#communes_r@data <- communes_r@data[, c("object_id", "commune_id", "district_id",
+#                                       "province_id", "commune", "district",
+#                                       "province", "commune_vn", "district_vn",
+#                                       "province_vn", "shape_length", "shape_area")]
 
 names(provinces_r@data) <- c("object_id", "province_vn", "province", "province_id",
                              "shape_length", "shape_area")
